@@ -375,6 +375,42 @@ async function main() {
     }))
     check('compose 超 256 KiB 返回 413', res.status === 413, String(res.status))
 
+    // 安全兜底：mode 传了未知值时必须回退为 overwrite（不误调模型消耗一次调用），
+    // 而不是被当成 merge。
+    const callsBeforeUnknownMode = llm.calls.length
+    res = await call(routes, '/api/agents-md/compose', makeRequest({
+      method: 'POST', body: { workspaceId: 'ws-1', content: '# 未知模式\n', mode: 'definitely-not-a-mode' },
+    }))
+    const unknownMode = await body(res)
+    check(
+      'compose 未知 mode 安全回退为 overwrite',
+      unknownMode.mode === 'overwrite' && unknownMode.usedGlobal === false,
+      JSON.stringify(unknownMode),
+    )
+    check('compose 未知 mode 不调用模型', llm.calls.length === callsBeforeUnknownMode, `${llm.calls.length} vs ${callsBeforeUnknownMode}`)
+
+    // 响应契约：必须是 JSON 且 no-store（面板每次都要读到最新内容）
+    const probeResponse = await call(routes, '/api/agents-md/global', makeRequest({}))
+    check(
+      '响应 content-type 为 application/json',
+      (probeResponse.headers.get('content-type') ?? '').includes('application/json'),
+      String(probeResponse.headers.get('content-type')),
+    )
+    check(
+      '响应带 cache-control: no-store',
+      probeResponse.headers.get('cache-control') === 'no-store',
+      String(probeResponse.headers.get('cache-control')),
+    )
+
+    // 请求体不是合法 JSON 时返回 400，而不是 500
+    const brokenBody = new Request(`${ORIGIN}/api/agents-md/global`, {
+      method: 'POST',
+      headers: { host: 'localhost:19387', origin: ORIGIN, 'content-type': 'application/json' },
+      body: '{ 这不是 JSON',
+    })
+    res = await call(routes, '/api/agents-md/global', brokenBody)
+    check('坏 JSON 请求体返回 400', res.status === 400, `${res.status} ${JSON.stringify(await body(res))}`)
+
     const errorHost = makeHost({
       llm: makeLlm([
         { type: 'text-delta', index: 0, text: 'partial' },
