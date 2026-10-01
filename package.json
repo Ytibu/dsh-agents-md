@@ -58,6 +58,7 @@
     "CONTRIBUTING.md",
     "LICENSE",
     "test-smoke.mjs",
+    "test-client-contract.mjs",
     "check-live.mjs",
     "check-contracts.mjs"
   ],
