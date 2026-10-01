@@ -83,7 +83,9 @@ DSH 会读取 `AGENTS.md` 里的规则来决定怎么干活。但手动管理这
 "dsh-agents-md": "file:/绝对路径/to/dsh-agents-md"
 ```
 
-> 目前只支持上面这种 `file:` 本地路径安装。插件没有发布到 npm，`github:` / npm 安装方式尚未验证可用。
+> 当前 DSH `0.2.0-rc.2` **没有随附 `dsh` CLI**，所以上面这种 profile 手动安装是唯一可用的方式。
+> 等 CLI 随版本发布后，也可以直接用 `dsh plugin --profile web add Ytibu/dsh-agents-md`——本插件的
+> `package.json` 已按该约定声明 `dsh.bundle.patch` 与 `dsh.client`，无需改动。
 
 **第二步**：在同一个 `package.json` 的 `dsh.profile.bundles` 数组里加上插件名：
 
