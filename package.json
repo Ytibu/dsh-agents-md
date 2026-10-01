@@ -56,6 +56,8 @@
     "cordis.patch.yml",
     "README.md",
     "CONTRIBUTING.md",
+    "CHANGELOG.md",
+    "TROUBLESHOOTING.md",
     "LICENSE",
     "test-smoke.mjs",
     "test-client-contract.mjs",

@@ -149,13 +149,15 @@ node check-contracts.mjs
 ## 常见问题
 
 **设置里看不到「AGENTS.md 管理」入口？**
-确认插件已加进 `dsh.profile.bundles`，然后重启 `dsh web` 并刷新页面。
+最常见的原因是只加了 `dependencies`、没加进 `dsh.profile.bundles`（两步缺一不可），然后需要重启 `dsh web` 并刷新页面。
 
 **页面提示 401 / 会话未通过鉴权？**
-刷新页面重新登录即可。插件的接口受 DSH 鉴权保护，非浏览器会话访问会被拒绝——这是预期行为。
+这是**预期行为**——接口受 DSH 鉴权保护，非浏览器会话访问会被拒绝。刷新页面重新登录即可。
 
-**「合并全局规则」失败了？**
-重新选一下模型再试；内容过长时先精简。
+**改了源码但没生效？**
+分两层：文件同步（`file:` 依赖是硬链接，原地编辑自动跟随，新增文件需重装）与模块加载（**Host 半边必须重启 `dsh web`**）。
+
+更多症状（合并失败、降级提示、备份文件、EBUSY、换版本后失效）见 **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)**。
 
 ---
 
@@ -181,23 +183,27 @@ node check-contracts.mjs
 **自检脚本**
 
 ```sh
-node test-smoke.mjs        # 离线冒烟测试（60 项断言，不需要运行中的 DSH）
-node check-contracts.mjs   # 兼容性自检：核对本机 DSH 是否满足所依赖的契约
-node check-live.mjs        # 运行态自检：确认 /api 栅栏真的拒绝未鉴权请求
+node test-smoke.mjs           # 离线冒烟测试（65 项断言，不需要运行中的 DSH）
+node test-client-contract.mjs # 客户端契约测试（19 项断言，锁住 host/client 接口一致）
+node check-contracts.mjs      # 兼容性自检：核对本机 DSH 是否满足所依赖的契约
+node check-live.mjs           # 运行态自检：栅栏是否生效 + client bundle 是否注入
 ```
 
 **目录结构**
 
 ```
 dsh-agents-md/
-├── cordis.patch.yml      # bundle patch：插入插件层
-├── package.json          # 含 dsh.compat（记录测试版本与依赖契约）
+├── cordis.patch.yml          # bundle patch：插入插件层
+├── package.json              # 含 dsh.compat（记录测试版本与依赖契约）
 ├── lib/
-│   ├── index.js          # Host：5 条 connection.fetch 路由
-│   └── client.js         # Client：手写 __ModuleLoader__ bundle
-├── test-smoke.mjs        # 离线冒烟测试
-├── check-contracts.mjs   # 兼容性自检
-└── check-live.mjs        # 运行态自检
+│   ├── index.js              # Host：5 条 connection.fetch 路由
+│   └── client.js             # Client：手写 __ModuleLoader__ bundle
+├── test-smoke.mjs            # 离线冒烟测试
+├── test-client-contract.mjs  # 客户端契约测试
+├── check-contracts.mjs       # 兼容性自检
+├── check-live.mjs            # 运行态自检
+├── CHANGELOG.md              # 更新日志
+└── TROUBLESHOOTING.md        # 故障排查
 ```
 
 </details>
