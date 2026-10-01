@@ -202,9 +202,9 @@ dsh-agents-md/
 
 ## 参与贡献
 
-**提 issue 请附上你的 DSH 版本**和 `node check-contracts.mjs` 的完整输出——这两样能直接区分「版本不兼容」还是「代码有问题」。
+欢迎贡献。**提 issue 请务必附上你的 DSH 版本和 `node check-contracts.mjs` 的完整输出**——这两样能直接区分「版本不兼容」还是「代码有问题」。仓库里有[问题模板](.github/ISSUE_TEMPLATE/bug_report.md)会提醒你填。
 
-改代码时：改了 Host 路由就同步更新 `test-smoke.mjs`；新增了对 DSH 内部契约的依赖，就在 `check-contracts.mjs` 的 `CONTRACTS` 数组和本文档的兼容性表格里各补一条——**这是插件最容易在 DSH 升级时静默失效的地方**。不要引入运行时依赖。
+改动代码前请读一下 [CONTRIBUTING.md](CONTRIBUTING.md)，重点只有一条：**新增对 DSH 内部契约的依赖时，要同步更新 `check-contracts.mjs` 和本文档的兼容性表格**——这是插件最容易在 DSH 升级时静默失效的地方。
 
 ## License
 
