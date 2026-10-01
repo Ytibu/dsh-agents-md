@@ -1,0 +1,67 @@
+{
+  "name": "dsh-agents-md",
+  "version": "1.0.0",
+  "description": "在 DSH Web 设置面板管理 AGENTS.md：编辑全局 AGENTS.md、编辑项目级 AGENTS.md，并按「合并全局规则」与「直接覆盖」两种方式生成项目级 AGENTS.md。仅适用于 DSH 0.2.0-rc.2。",
+  "type": "module",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "author": "Ytibu",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ytibu/dsh-agents-md.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ytibu/dsh-agents-md/issues"
+  },
+  "homepage": "https://github.com/Ytibu/dsh-agents-md#readme",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "agents",
+    "agents-md",
+    "rules",
+    "instructions"
+  ],
+  "dsh": {
+    "compat": {
+      "testedOn": "0.2.0-rc.2",
+      "requires": {
+        "@deepseek-ai/dsh-desktop-runtime": "0.2.0-rc.2"
+      },
+      "note": "使用 DSH 内部契约（connection.fetch.register / workspaceRegistry / llm / agentDefaultModel / settings.section），版本升级可能失效。请用 node check-contracts.mjs 核对当前版本。"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-settings"
+      ],
+      "platform": "web"
+    }
+  },
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": "./lib/client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE",
+    "test-smoke.mjs",
+    "check-live.mjs",
+    "check-contracts.mjs"
+  ],
+  "//files-note": "AGENTS.md（本仓库自身的项目规则）刻意不打包：它是这个仓库开发时用的，不是插件内容。",
+  "engines": {
+    "node": ">=20"
+  }
+}

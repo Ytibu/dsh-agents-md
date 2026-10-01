@@ -1,0 +1,9 @@
+# 发布用的源码统一用 LF：插件要跨平台（Windows/macOS/Linux）使用，
+# 仓库里存 CRLF 会让 Linux 用户拿到带 \r 的 .js/.mjs，虽然能跑但 diff 会乱。
+* text=auto eol=lf
+
+# 明确的二进制类型，避免被当文本改写
+*.png binary
+*.jpg binary
+*.ico binary
+*.zip binary

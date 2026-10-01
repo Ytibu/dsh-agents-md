@@ -1,0 +1,22 @@
+# 依赖与构建产物
+node_modules/
+dist/
+*.log
+
+# 编辑器与系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 本仓库自身的项目规则：是本仓库开发时用的，不随插件发布
+AGENTS.md
+AGENTS.local.md
+CLAUDE.local.md
+
+# 插件写盘时产生的备份（AGENTS.md.bak-<时间戳>）
+*.bak-*
+
+# 临时/探针文件
+*.tmp
+.restart-verify.txt

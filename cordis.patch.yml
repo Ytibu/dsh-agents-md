@@ -1,0 +1,4 @@
+# dsh bundle patch：安装机制要求的补丁，把本插件插入 profile 的层栈。
+- insert:
+    - id: agents-md
+      name: 'dsh-agents-md'
